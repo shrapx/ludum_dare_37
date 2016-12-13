@@ -1,3 +1,6 @@
+#version 330
+
+in vec2 coord;
 out vec4 fragment;
 
 uniform sampler2D texture;
@@ -46,8 +49,9 @@ void main()
     vec4  luma   = mix(vec4(1),vec4( rand ), strength);
 	luma.w = 1;
 	
-	vec4 dark = texture2D(texture, gl_TexCoord[0].xy);
-    //fragment = mix(dark, luma*dark, 0.5);
-    fragment = luma*dark;
-    //fragment = mix(dark,vec4( rand ), strength);
+	//vec4 dark = texture2D(texture, gl_TexCoord[0].xy);
+	vec4 dark = texture2D(texture, coord);
+	//fragment = mix(dark, luma*dark, 0.5);
+	fragment = luma*dark;
+	//fragment = mix(dark,vec4( rand ), strength);
 }
