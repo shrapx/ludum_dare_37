@@ -21,7 +21,7 @@ public:
 		auto emplace_result = shaders.emplace(tag, std::make_unique<sf::Shader>());
 		assert(emplace_result.second);
 		sf::Shader* shad = emplace_result.first->second.get();
-		assert(shad->loadFromFile(file_frag, sf::Shader::Fragment) );
+		int r = shad->loadFromFile(file_frag, sf::Shader::Fragment); assert(r);
 		return shad;
 	}
 	
@@ -30,7 +30,7 @@ public:
 		auto emplace_result = shaders.emplace(tag, std::make_unique<sf::Shader>());
 		assert(emplace_result.second);
 		sf::Shader* shad = emplace_result.first->second.get();
-		assert(shad->loadFromFile(file_vert, file_frag) );
+		int r = shad->loadFromFile(file_vert, file_frag); assert(r);
 		return shad;
 	}
 
@@ -39,7 +39,7 @@ public:
 		auto emplace_result = fonts.emplace(tag, std::make_unique<sf::Font>());
 		assert(emplace_result.second);
 		sf::Font* font = emplace_result.first->second.get();
-		assert( font->loadFromFile(filepath) );
+		int r = font->loadFromFile(filepath); assert(r);
 		return font;
 	}
 
@@ -47,7 +47,7 @@ public:
 	{
 		auto emplace_result = textures.emplace(tag, std::make_unique<sf::Texture>());
 		sf::Texture* tex = emplace_result.first->second.get();
-		assert( tex->loadFromFile(filepath) );
+		int r = tex->loadFromFile(filepath); assert(r);
 		return tex;
 	}
 
@@ -55,7 +55,7 @@ public:
 	{
 		auto emplace_result = soundbuffers.emplace(tag, std::make_unique<sf::SoundBuffer>());
 		sf::SoundBuffer* sb = emplace_result.first->second.get();
-		assert( sb->loadFromFile(filepath) );
+		int r = sb->loadFromFile(filepath); assert(r);
 		return sb;
 	}
 	
@@ -63,7 +63,7 @@ public:
 	{
 		auto emplace_result = music.emplace(tag, std::make_unique<sf::Music>());
 		sf::Music* sb = emplace_result.first->second.get();
-		assert( sb->openFromFile(filepath) );
+		int r = sb->openFromFile(filepath); assert(r);
 		return sb;
 	}
 	std::unordered_map<std::string, std::unique_ptr<sf::Shader>> shaders;
