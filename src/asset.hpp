@@ -58,11 +58,19 @@ public:
 		assert( sb->loadFromFile(filepath) );
 		return sb;
 	}
-
+	
+	sf::Music* load_music(const std::string& tag, const std::string& filepath)
+	{
+		auto emplace_result = music.emplace(tag, std::make_unique<sf::Music>());
+		sf::Music* sb = emplace_result.first->second.get();
+		assert( sb->openFromFile(filepath) );
+		return sb;
+	}
 	std::unordered_map<std::string, std::unique_ptr<sf::Shader>> shaders;
 	std::unordered_map<std::string, std::unique_ptr<sf::Font>> fonts;
 	std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textures;
 	std::unordered_map<std::string, std::shared_ptr<sf::SoundBuffer>> soundbuffers;
+	std::unordered_map<std::string, std::shared_ptr<sf::Music>> music;
 };
 
 #endif // _ASSET_HPP_

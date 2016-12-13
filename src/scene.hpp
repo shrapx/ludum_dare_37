@@ -135,8 +135,8 @@ public:
 		
 		switch( level )
 		{
-			case 0: {load_level_one(); break;}
-			case 1: {load_level_zero(); break;}
+			case 0: {load_level_zero(); break;}
+			case 1: {load_level_one(); break;}
 			default: assert(false);
 		}
 	}
@@ -159,6 +159,14 @@ public:
 	void load_level_zero()
 	{
 		night_scene = true;
+		
+		auto h = asset.music.at("heli");
+		h->setLoop(true);
+		h->play();
+		
+		auto l = asset.music.at("loop");
+		l->setLoop(true);
+		l->play();
 		
 		auto& players = *asset.textures.at("player");
 		
@@ -277,6 +285,7 @@ public:
 	
 	void load_level_one()
 	{
+		
 		night_scene = false;
 		
 		auto& players = *asset.textures.at("player");
@@ -400,7 +409,53 @@ public:
 									if (frob_name == "light_wc") has_light_wc = time;
 									if (frob_name == "light_front") has_light_front = time;
 									if (frob_name == "light_back") has_light_back = time;
-									if (frob_name == "light_tv") has_light_tv = time;
+									
+									auto w = asset.music.at("winge");
+									if(light_wc->get_frame() ||
+									light_front->get_frame() ||
+									light_back->get_frame())
+									{
+										if ( w->getStatus() != sf::Music::Status::Playing )
+										{
+											w->setLoop(true);
+											w->play();
+										}
+									}
+									else
+									{
+										w->stop();
+									}
+									
+									
+									auto n = asset.music.at("noise");
+									
+									if (frob_name == "light_tv")
+									{
+										has_light_tv = time;
+										
+										
+										if ( n->getStatus() == sf::Music::Status::Playing )
+											n->stop();
+										else
+										{
+											n->setLoop(true);
+											n->play();
+											
+										}
+									}
+									
+									
+									auto l = asset.music.at("loop");
+									if ( w->getStatus() != sf::Music::Status::Playing && n->getStatus() != sf::Music::Status::Playing )
+									{
+										l->setLoop(true);
+										l->play();
+									}
+									else
+									{
+										l->pause();
+									}
+									
 									
 									// flashlight pickup;
 									if (trigname == "flashlight")
@@ -412,6 +467,12 @@ public:
 								}
 								case 1:
 								{
+									
+									auto l = asset.music.at("loop"); if ( l->getStatus() == sf::Music::Status::Playing ) l->stop();									
+									auto n = asset.music.at("noise"); if ( n->getStatus() == sf::Music::Status::Playing ) n->stop();									
+									auto h = asset.music.at("heli"); if ( h->getStatus() == sf::Music::Status::Playing ) h->stop();									
+									auto w = asset.music.at("winge"); if ( w->getStatus() == sf::Music::Status::Playing ) w->stop();
+									
 									if (frob_name == "key") return 0;
 									break;
 								}

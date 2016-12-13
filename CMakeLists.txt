@@ -6,10 +6,10 @@ set(TARGET ldjam37)
 project(${TARGET})
 
 # includes
-#set(SFML_ROOT "C:/Program Files (x86)/SFML")
+set(SFML_ROOT "C:/Program Files (x86)/SFML")
 find_package(SFML COMPONENTS audio graphics window system)
 include_directories(${SFML_INCLUDE_DIR})
-#include_directories("E:/dev/usr/include")
+include_directories("E:/dev/usr/include")
 
 # libraries
 set(LIBS

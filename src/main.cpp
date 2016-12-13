@@ -66,6 +66,16 @@ int main()
 	asset.load_texture("furnitures", "data/furnitures.png");
 	asset.load_texture("lights", "data/lights.png");
 	
+	
+	asset.load_soundbuffer("blip", "data/blip.ogg"); // item highlight
+	asset.load_soundbuffer("switch", "data/switch.ogg"); // flashlight on/off + light switch
+	
+	
+	asset.load_music("heli", "data/heli.ogg"); // lower screen music
+	asset.load_music("loop", "data/loop.ogg"); // upper screen music
+	asset.load_music("noise", "data/white_noise.ogg"); // tv on
+	asset.load_music("winge", "data/winge.ogg");  // any light on
+	
 	/*sf::RenderTexture ui_render;
 	sf::Sprite ui_sprite;
 	ui_render.create(ZOOM_W, ZOOM_H, false);
