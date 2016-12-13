@@ -7,7 +7,6 @@
 #include "SFML/Audio.hpp"
 
 #include "common.hpp"
-#include "colour.hpp"
 #include "collide.hpp"
 #include "room.hpp"
 #include "actor.hpp"
