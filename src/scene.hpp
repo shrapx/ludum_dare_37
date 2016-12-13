@@ -46,6 +46,10 @@ private:
 	//sf::Sprite ambient;
 	//sf::Sprite light_damp;
 	
+	sf::Sound sound_blip;
+	sf::Sound sound_switch;
+	Prop* last_clickless_frob = nullptr;
+	
 	Torchlight torch;
 	
 	Collide exterior_light_collide;
@@ -111,6 +115,9 @@ public:
 		heli_light(exterior_light_collide),
 		heli_light2(exterior_light_collide)
 	{
+		
+		sound_blip.setBuffer( *asset.soundbuffers.at("blip") );
+		sound_switch.setBuffer( *asset.soundbuffers.at("switch") );
 		
 		exterior_light_collide.setTexture(*asset.textures.at("exterior_light_collide"));
 		
@@ -395,12 +402,15 @@ public:
 					
 					if (p.intersects(t) && dist(trig.getPosition(), pos)<10)
 					{
+						
 						//persist.trigger_flags.insert(trig.trigger());
 						std::string frob_name = trig.trigger();
 						auto& prop = trigger_props[frob_name];
 						if (prop)
 						{
 							std::string trigname = prop->trigger();
+							
+							if (trigname == "off") sound_switch.play();
 							
 							switch (level)
 							{
@@ -411,10 +421,14 @@ public:
 									if (frob_name == "light_back") has_light_back = time;
 									
 									auto w = asset.music.at("winge");
+									
 									if(light_wc->get_frame() ||
 									light_front->get_frame() ||
 									light_back->get_frame())
 									{
+										
+										sound_switch.play();
+										
 										if ( w->getStatus() != sf::Music::Status::Playing )
 										{
 											w->setLoop(true);
@@ -480,6 +494,27 @@ public:
 						}
 						
 						//else (play_fail_noise);
+					}
+				}
+			}
+			else
+			{
+				
+				for (auto& kv : triggers)
+				{
+					auto& trig = *kv.second;
+					
+					//auto p = pointer->getGlobalBounds();
+					auto p = pointer->getPosition();
+					auto t = trig.getGlobalBounds();
+					
+					if (t.contains(p) && last_clickless_frob != kv.second.get())
+					{
+						last_clickless_frob = kv.second.get();
+						
+						sound_blip.play();
+						
+						break;
 					}
 				}
 			}
@@ -572,10 +607,18 @@ public:
 			// flashlight
 			
 			bool fl = input.get_command.at(0).at("flashlight");
-			if (fl && !flashlight_trigger) { flashlight_trigger = true; flashlight_toggle = !flashlight_toggle; }
+			if (fl && !flashlight_trigger)
+			{
+				flashlight_trigger = true;
+				flashlight_toggle = !flashlight_toggle;
+				sound_switch.play();
+			}
+			
 			if (!fl && flashlight_trigger) flashlight_trigger = false;
 			if (got_flashlight && flashlight_toggle)
 			{
+				
+				
 				torch.pos = pos;
 				 
 				auto mp = normalize(mouse - pos);
